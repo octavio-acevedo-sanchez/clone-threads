@@ -1,6 +1,6 @@
 import { UserButton } from '@clerk/nextjs';
 
-const OnBoardingPage = () => {
+const OnBoardingPage = (): React.ReactNode => {
 	return (
 		<div className='text-white'>
 			OnBoardingPage <UserButton afterSignOutUrl='/' />
