@@ -1,7 +1,7 @@
 'use server';
 
 import { connectToDB } from '@/lib/mongoose';
-import Thread from '@/lib/models/thread.model';
+import Thread, { type IThread } from '@/lib/models/thread.model';
 import User from '@/lib/models/user.model';
 import { revalidatePath } from 'next/cache';
 
@@ -36,4 +36,39 @@ export async function createThread({
 	} catch (error: any) {
 		throw new Error(`Error creating thread: ${error.message}`);
 	}
+}
+
+export async function fetchPosts(
+	pageNumber = 1,
+	pageSize = 2
+): Promise<{ posts: IThread[]; isNext: boolean }> {
+	await connectToDB();
+
+	const skipAmount = (pageNumber - 1) * pageSize;
+
+	const postQuery = Thread.find({ parentId: { $in: [null, undefined] } })
+		.sort({
+			createdAt: 'desc'
+		})
+		.skip(skipAmount)
+		.limit(pageSize)
+		.populate({ path: 'author', model: User })
+		.populate({
+			path: 'children',
+			populate: {
+				path: 'author',
+				model: User,
+				select: '_id name parentId image'
+			}
+		});
+
+	const totalPostCount = await Thread.countDocuments({
+		parentId: { $in: [null, undefined] }
+	});
+
+	const posts = await postQuery.exec();
+
+	const isNext = totalPostCount > skipAmount + posts.length;
+
+	return { posts, isNext };
 }
