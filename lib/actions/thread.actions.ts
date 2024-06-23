@@ -1,7 +1,7 @@
 'use server';
 
 import { connectToDB } from '@/lib/mongoose';
-import Thread, { type IThread } from '@/lib/models/thread.model';
+import Thread, { type IThreadInfo } from '@/lib/models/thread.model';
 import User from '@/lib/models/user.model';
 import { revalidatePath } from 'next/cache';
 
@@ -41,7 +41,7 @@ export async function createThread({
 export async function fetchPosts(
 	pageNumber = 1,
 	pageSize = 2
-): Promise<{ posts: IThread[]; isNext: boolean }> {
+): Promise<{ posts: IThreadInfo[]; isNext: boolean }> {
 	await connectToDB();
 
 	const skipAmount = (pageNumber - 1) * pageSize;
@@ -71,4 +71,42 @@ export async function fetchPosts(
 	const isNext = totalPostCount > skipAmount + posts.length;
 
 	return { posts, isNext };
+}
+
+export async function fetchThreadById(id: string): Promise<IThreadInfo> {
+	await connectToDB();
+
+	try {
+		const thread = await Thread.findById(id)
+			.populate({
+				path: 'author',
+				model: User,
+				select: '_id id name image'
+			})
+			.populate({
+				path: 'children',
+				populate: [
+					{
+						path: 'author',
+						model: User,
+						select: '_id id name parentId image'
+					},
+					{
+						path: 'children',
+						model: Thread,
+						populate: {
+							path: 'author',
+							model: User,
+							select: '_id id name parentId image'
+						}
+					}
+				]
+			})
+			.exec();
+
+		// console.log(thread);
+		return thread;
+	} catch (error: any) {
+		throw new Error(`Error fetching thread: ${error.message}`);
+	}
 }

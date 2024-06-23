@@ -10,6 +10,24 @@ export interface IThread {
 	children: Types.ObjectId[];
 }
 
+export interface IThreadInfo {
+	_id: string;
+	text: string;
+	author: { name: string; image: string; id: string };
+	parentId: string;
+	community: {
+		id: string;
+		name: string;
+		image: string;
+	} | null;
+	createdAt: string;
+	children: Array<{
+		author: {
+			image: string;
+		};
+	}>;
+}
+
 const threadSchema = new mongoose.Schema<IThread>({
 	text: { type: String, required: true },
 	author: {
