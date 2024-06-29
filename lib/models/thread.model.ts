@@ -22,9 +22,34 @@ export interface IThreadInfo {
 	} | null;
 	createdAt: string;
 	children: Array<{
-		author: {
+		_id: string;
+		parentId: string;
+		text: string;
+		createdAt: string;
+		community: {
+			id: string;
+			name: string;
 			image: string;
+		} | null;
+		author: {
+			name: string;
+			image: string;
+			id: string;
 		};
+		children: Array<{
+			_id: string;
+			parentId: string;
+			text: string;
+			createdAt: string;
+			community: {
+				id: string;
+				name: string;
+				image: string;
+			} | null;
+			author: {
+				image: string;
+			};
+		}>;
 	}>;
 }
 
