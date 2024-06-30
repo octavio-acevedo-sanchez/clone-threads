@@ -3,10 +3,9 @@
 import { sidebarLinks } from '@/constants';
 import Image from 'next/image';
 import Link from 'next/link';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 
 const Bottombar = (): React.ReactNode => {
-	const router = useRouter();
 	const pathname = usePathname();
 
 	return (

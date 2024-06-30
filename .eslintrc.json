@@ -18,7 +18,7 @@
     "plugins": [
         "react"
     ],
-    "ignorePatterns": ["components/ui/*.tsx","liveblocks.config.ts","types/canvas.ts","app/api/webhook/clerk/route.ts"],
+    "ignorePatterns": ["components/ui/*.tsx","liveblocks.config.ts","types/canvas.ts","lib/actions/*.ts","app/api/webhook/clerk/route.ts"],
     "rules": {
         "@typescript-eslint/strict-boolean-expressions": "off",
         // "@typescript-eslint/no-confusing-void-expression": "off",
