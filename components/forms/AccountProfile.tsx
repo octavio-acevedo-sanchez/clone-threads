@@ -25,8 +25,8 @@ import { usePathname, useRouter } from 'next/navigation';
 interface Props {
 	user: {
 		id: string;
-		objectId: string;
-		username: string;
+		objectId: string | undefined;
+		username: string | null;
 		name: string;
 		bio: string;
 		image: string;
@@ -44,8 +44,8 @@ const AccountProfile = ({ user, btnTitle }: Props): React.ReactNode => {
 		resolver: zodResolver(UserValidation),
 		defaultValues: {
 			profile_photo: user?.image || '',
-			name: user?.name || '',
-			username: user?.username || '',
+			name: user?.name ?? '',
+			username: user?.username ?? '',
 			bio: user?.bio || ''
 		}
 	});

@@ -11,7 +11,7 @@ export const connectToDB = async (): Promise<void> => {
 	}
 
 	if (isConnected) {
-		console.log('Already connecto to MongoDB');
+		console.log('Already connect to MongoDB');
 		return;
 	}
 

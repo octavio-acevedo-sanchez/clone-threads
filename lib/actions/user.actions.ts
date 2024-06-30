@@ -3,7 +3,7 @@
 import User, { type IUser } from '@/lib/models/user.model';
 import { connectToDB } from '@/lib/mongoose';
 import { revalidatePath } from 'next/cache';
-import Thread from '@/lib/models/thread.model';
+import Thread, { type IThreadInfo } from '@/lib/models/thread.model';
 import type { SortOrder, FilterQuery } from 'mongoose';
 
 interface Props {
@@ -134,7 +134,9 @@ export async function fetchUsers({
 	}
 }
 
-export async function getActivity(userId: string) {
+export async function getActivity(
+	userId: string
+): Promise<IThreadInfo[] | null> {
 	try {
 		await connectToDB();
 
